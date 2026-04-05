@@ -342,7 +342,7 @@
     </style>
 </head>
 <body>
-    <div class="container" role="main" aria-label="자기소개 인터뷰 수행평가">
+    <main class="container" aria-label="자기소개 인터뷰 수행평가">
 
         <!-- ==================== START SCREEN ==================== -->
         <div class="screen active" id="startScreen">
@@ -372,7 +372,7 @@
         </div>
 
         <!-- ==================== INTERVIEW SCREEN ==================== -->
-        <div class="screen" id="interviewScreen" aria-label="수행평가 진행 중">
+        <div class="screen" id="interviewScreen" role="region" aria-label="수행평가 진행 중">
             <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                 <div class="progress-fill" id="progressBar"></div>
             </div>
@@ -406,7 +406,7 @@
                 <button class="btn btn-outline" id="replayBtn" style="display:none;" aria-label="다시 듣기">
                     <span aria-hidden="true">&#x1F501;</span> 다시 듣기
                 </button>
-                <button class="btn btn-primary" id="nextBtn" aria-label="다음">
+                <button class="btn btn-primary" id="nextBtn">
                     다음
                 </button>
                 <button class="btn btn-danger" id="exitBtn" aria-label="종료">
@@ -436,7 +436,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
     (function() {
@@ -487,11 +487,19 @@
             }
         }
 
+        function resetGuideButtonLabels() {
+            $('guideKoreanBtn').innerHTML =
+                '<span aria-hidden="true">&#x1F50A;</span> 설명 듣기 (한국어)';
+            $('guideEnglishBtn').innerHTML =
+                '<span aria-hidden="true">&#x1F50A;</span> Guide (English)';
+        }
+
         function stopGuideAudio() {
             if (guideAudio && !guideAudio.paused) {
                 guideAudio.pause();
                 guideAudio.currentTime = 0;
             }
+            resetGuideButtonLabels();
         }
 
         function playAudio(filename) {
@@ -559,6 +567,7 @@
             updateTimerDisplay(duration, duration);
 
             timerInterval = setInterval(() => {
+                if (timeLeft <= 0) return;
                 timeLeft--;
                 updateTimerDisplay(timeLeft, duration);
 
@@ -587,6 +596,11 @@
             circle.classList.remove('warning', 'danger');
             if (remaining <= 3) circle.classList.add('danger');
             else if (remaining <= 5) circle.classList.add('warning');
+
+            // Announce key thresholds for screen reader users
+            if (remaining === 10) announce('10초 남았습니다.');
+            else if (remaining === 5) announce('5초 남았습니다.');
+            else if (remaining === 3) announce('3초 남았습니다.');
         }
 
         // ==================== QUESTION SELECTION ====================
@@ -606,8 +620,15 @@
             // Focus first heading or button for accessibility
             const focusTarget = $(id).querySelector('h1, h3, .btn-primary');
             if (focusTarget) {
+                const hadTabindex = focusTarget.hasAttribute('tabindex');
                 focusTarget.setAttribute('tabindex', '-1');
                 focusTarget.focus();
+                if (!hadTabindex) {
+                    focusTarget.addEventListener('blur', function onBlur() {
+                        focusTarget.removeAttribute('tabindex');
+                        focusTarget.removeEventListener('blur', onBlur);
+                    });
+                }
             }
         }
 
@@ -617,8 +638,13 @@
             const total = 4;
             const current = currentQuestionIndex + 2; // -1→1, 0→2, 1→3, 2→4
             const pct = (current / total) * 100;
+            const phaseLabels = ['자기소개', '질문 1', '질문 2', '질문 3'];
+            const label = phaseLabels[currentQuestionIndex + 1] || '';
+            const bar = $('progressBar').parentElement;
+            bar.setAttribute('aria-valuenow', Math.round(pct));
+            bar.setAttribute('aria-valuetext',
+                `${current}단계 / ${total}단계 — ${label}`);
             $('progressBar').style.width = pct + '%';
-            $('progressBar').parentElement.setAttribute('aria-valuenow', Math.round(pct));
         }
 
         // ==================== DISPLAY ====================
@@ -697,23 +723,27 @@
 
         // ==================== EVENT LISTENERS ====================
 
-        // Guide buttons
+        // Guide buttons — track which type is playing to handle cross-button toggle
+        let activeGuideType = null;
+
         $('guideKoreanBtn').addEventListener('click', () => {
-            if (guideAudio && !guideAudio.paused) {
+            if (guideAudio && !guideAudio.paused && activeGuideType === 'korean') {
                 stopGuideAudio();
-                $('guideKoreanBtn').innerHTML =
-                    '<span aria-hidden="true">&#x1F50A;</span> 설명 듣기 (한국어)';
+                activeGuideType = null;
             } else {
+                stopGuideAudio();
+                activeGuideType = 'korean';
                 playGuide('korean');
             }
         });
 
         $('guideEnglishBtn').addEventListener('click', () => {
-            if (guideAudio && !guideAudio.paused) {
+            if (guideAudio && !guideAudio.paused && activeGuideType === 'english') {
                 stopGuideAudio();
-                $('guideEnglishBtn').innerHTML =
-                    '<span aria-hidden="true">&#x1F50A;</span> Guide (English)';
+                activeGuideType = null;
             } else {
+                stopGuideAudio();
+                activeGuideType = 'english';
                 playGuide('english');
             }
         });
