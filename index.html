@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1학년 영어 말하기 수행평가 - 자기소개 인터뷰</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #4A6CF7;
+            --primary-dark: #3B5CE4;
+            --accent: #10B981;
+            --accent-dark: #059669;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --bg: #0F172A;
+            --bg-card: #1E293B;
+            --bg-card-light: #334155;
+            --text: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border: #475569;
+            --mint: #6EE7B7;
+            --gold: #FCD34D;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--bg-card);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            border: 1px solid var(--border);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 30px;
+            color: var(--mint);
+        }
+
+        .info-box {
+            background: var(--bg);
+            border-left: 4px solid var(--primary);
+            padding: 18px 20px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box p {
+            margin: 6px 0;
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .info-box strong {
+            color: var(--mint);
+        }
+
+        /* Buttons */
+        .btn {
+            color: white;
+            border: none;
+            padding: 14px 36px;
+            font-size: 17px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+            font-weight: 700;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .btn:active { transform: translateY(0); }
+        .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+        .btn-primary { background: var(--primary); }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-accent { background: var(--accent); }
+        .btn-accent:hover { background: var(--accent-dark); }
+        .btn-danger { background: var(--danger); }
+        .btn-warning { background: var(--warning); color: #1E293B; }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-muted);
+        }
+        .btn-outline:hover { border-color: var(--text); color: var(--text); }
+
+        /* Screens */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* Start Screen */
+        .start-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        /* Progress */
+        .progress-bar {
+            background: var(--bg);
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--mint) 100%);
+            height: 100%;
+            transition: width 0.4s ease;
+            border-radius: 4px;
+        }
+
+        /* Question Area */
+        .question-area {
+            background: var(--bg);
+            padding: 36px;
+            border-radius: 16px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid var(--border);
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phase-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .phase-intro { background: var(--primary); color: white; }
+        .phase-question { background: var(--warning); color: #1E293B; }
+
+        .category-badge {
+            display: inline-block;
+            background: var(--bg-card-light);
+            color: var(--mint);
+            padding: 4px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .question-counter {
+            color: var(--text-muted);
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 22px;
+            font-weight: 500;
+            line-height: 1.6;
+            color: var(--text);
+            margin-top: 8px;
+        }
+
+        .instruction-text {
+            color: var(--text-muted);
+            font-size: 16px;
+            line-height: 1.8;
+            margin-top: 12px;
+        }
+
+        /* Timer */
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .timer-ring {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .timer-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .timer-ring circle {
+            fill: none;
+            stroke-width: 6;
+        }
+
+        .timer-ring .bg { stroke: var(--bg-card-light); }
+
+        .timer-ring .fg {
+            stroke: var(--mint);
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s linear, stroke 0.3s;
+        }
+
+        .timer-ring .fg.warning { stroke: var(--warning); }
+        .timer-ring .fg.danger { stroke: var(--danger); }
+
+        .timer-number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .audio-status {
+            text-align: center;
+            color: var(--primary);
+            font-size: 15px;
+            margin: 12px 0;
+            min-height: 22px;
+            font-weight: 500;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 24px 0;
+            flex-wrap: wrap;
+        }
+
+        /* Completion */
+        .completion-icon {
+            font-size: 72px;
+            margin-bottom: 16px;
+        }
+
+        .completion-section h3 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .completion-section p {
+            color: var(--text-muted);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .summary-box {
+            background: var(--bg);
+            padding: 20px 24px;
+            border-radius: 12px;
+            margin: 24px 0;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+
+        .summary-box h4 {
+            color: var(--mint);
+            margin-bottom: 14px;
+            font-size: 16px;
+        }
+
+        .summary-box ul { list-style: none; padding: 0; }
+
+        .summary-box li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .summary-box li:last-child { border-bottom: none; }
+
+        /* Visually hidden for screen readers */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Live region for announcements */
+        [aria-live] {
+            position: relative;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            h1 { font-size: 20px; }
+            .question-area { padding: 24px 16px; }
+            .question-text { font-size: 18px; }
+            .btn { padding: 12px 24px; font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" role="main" aria-label="자기소개 인터뷰 수행평가">
+
+        <!-- ==================== START SCREEN ==================== -->
+        <div class="screen active" id="startScreen">
+            <h1>1학년 영어 말하기 수행평가</h1>
+            <h2>자기소개 인터뷰 (Self-Introduction Interview)</h2>
+
+            <div class="info-box" role="region" aria-label="평가 안내">
+                <p><strong>평가 방법:</strong> 자기소개(20초) + 3개 질문 응답(각 15초)</p>
+                <p><strong>진행 순서:</strong></p>
+                <p style="margin-left: 20px;">1. 영어로 자기소개 (이름 + 2가지 이상 정보)</p>
+                <p style="margin-left: 20px;">2. 3개 질문에 영어로 답변 (카테고리별 1개 무작위 선택)</p>
+                <p><strong>카테고리:</strong> Favorites, Important People, Daily Habits</p>
+                <p><strong>시간 안내:</strong> 시간이 끝나면 벨 소리가 울립니다.</p>
+            </div>
+
+            <div class="start-buttons">
+                <button class="btn btn-accent" id="guideKoreanBtn" aria-label="한국어 설명 듣기">
+                    <span aria-hidden="true">&#x1F50A;</span> 설명 듣기 (한국어)
+                </button>
+                <button class="btn btn-outline" id="guideEnglishBtn" aria-label="영어 설명 듣기">
+                    <span aria-hidden="true">&#x1F50A;</span> Guide (English)
+                </button>
+                <button class="btn btn-primary" id="startBtn" aria-label="수행평가 시작">
+                    수행평가 시작
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== INTERVIEW SCREEN ==================== -->
+        <div class="screen" id="interviewScreen" aria-label="수행평가 진행 중">
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+
+            <div class="question-area" id="questionArea">
+                <span class="phase-badge phase-intro" id="phaseBadge">자기소개</span>
+                <span class="category-badge" id="categoryBadge" style="display:none;">Category</span>
+                <div class="question-counter" id="questionCounter"></div>
+                <div class="question-text" id="questionText" aria-live="assertive">
+                    영어로 자기소개를 해 주세요.
+                </div>
+                <div class="instruction-text" id="instructionText">
+                    이름을 말하고, 좋아하는 것이나 취미 등 자신에 대한 정보를 두 가지 이상 말해 주세요.
+                </div>
+            </div>
+
+            <div class="timer-container" aria-label="남은 시간">
+                <div class="timer-ring">
+                    <svg width="80" height="80" viewBox="0 0 80 80">
+                        <circle class="bg" cx="40" cy="40" r="34"></circle>
+                        <circle class="fg" id="timerCircle" cx="40" cy="40" r="34"
+                                stroke-dasharray="213.628" stroke-dashoffset="0"></circle>
+                    </svg>
+                    <div class="timer-number" id="timerNumber" aria-live="off">--</div>
+                </div>
+            </div>
+
+            <div class="audio-status" id="audioStatus" aria-live="polite"></div>
+
+            <div class="controls">
+                <button class="btn btn-outline" id="replayBtn" style="display:none;" aria-label="다시 듣기">
+                    <span aria-hidden="true">&#x1F501;</span> 다시 듣기
+                </button>
+                <button class="btn btn-primary" id="nextBtn" aria-label="다음">
+                    다음
+                </button>
+                <button class="btn btn-danger" id="exitBtn" aria-label="종료">
+                    종료
+                </button>
+            </div>
+
+            <div class="sr-only" id="srAnnouncer" aria-live="assertive" role="status"></div>
+        </div>
+
+        <!-- ==================== COMPLETION SCREEN ==================== -->
+        <div class="screen" id="completionScreen">
+            <div class="completion-section" style="text-align:center; padding: 20px 0;">
+                <div class="completion-icon" aria-hidden="true">&#x2705;</div>
+                <h3>수행평가가 완료되었습니다!</h3>
+                <p>자기소개와 3개의 질문에 모두 답변하셨습니다.<br>수고하셨습니다!</p>
+
+                <div class="summary-box">
+                    <h4>답변한 질문 목록</h4>
+                    <ul id="questionSummary" role="list"></ul>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <button class="btn btn-primary" id="restartBtn" aria-label="다시 시작하기">
+                        다시 시작하기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        'use strict';
+
+        // ==================== DATA ====================
+        const questions = {
+            favorites: [
+                { id: 'cat1_q1', text: "What's your favorite subject?" },
+                { id: 'cat1_q2', text: "What's your favorite food?" },
+                { id: 'cat1_q3', text: "What's your favorite sport?" }
+            ],
+            people: [
+                { id: 'cat2_q1', text: 'Who is your best friend?' },
+                { id: 'cat2_q2', text: 'Who is special to you?' },
+                { id: 'cat2_q3', text: 'Who is in your heart?' }
+            ],
+            habits: [
+                { id: 'cat3_q1', text: 'How often do you exercise?' },
+                { id: 'cat3_q2', text: 'How often do you eat breakfast?' },
+                { id: 'cat3_q3', text: 'How often do you read books?' }
+            ]
+        };
+
+        const categoryNames = {
+            favorites: 'Favorites (좋아하는 것)',
+            people: 'Important People (소중한 사람)',
+            habits: 'Daily Habits (일상 습관)'
+        };
+
+        // ==================== STATE ====================
+        let selectedQuestions = [];
+        let currentQuestionIndex = -1; // -1 = intro phase
+        let currentAudio = null;
+        let guideAudio = null;
+        let timerInterval = null;
+        let timeLeft = 0;
+
+        // ==================== DOM REFS ====================
+        const $ = id => document.getElementById(id);
+
+        // ==================== AUDIO ====================
+        function stopCurrentAudio() {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentAudio = null;
+            }
+        }
+
+        function stopGuideAudio() {
+            if (guideAudio && !guideAudio.paused) {
+                guideAudio.pause();
+                guideAudio.currentTime = 0;
+            }
+        }
+
+        function playAudio(filename) {
+            stopCurrentAudio();
+            const path = `음원/${filename}.mp3`;
+            currentAudio = new Audio(path);
+            $('audioStatus').textContent = '음원을 재생하고 있습니다...';
+
+            currentAudio.play().catch(() => {
+                $('audioStatus').textContent = '오디오 재생 중 오류가 발생했습니다.';
+            });
+
+            currentAudio.onended = () => {
+                $('audioStatus').textContent = '음원 재생 완료';
+                startTimer();
+            };
+
+            currentAudio.onerror = () => {
+                $('audioStatus').textContent = '오디오 파일을 찾을 수 없습니다.';
+                startTimer(); // still let them answer
+            };
+        }
+
+        function playGuide(type) {
+            stopGuideAudio();
+            guideAudio = new Audio(`음원/guide_${type}.mp3`);
+            const btn = type === 'korean' ? $('guideKoreanBtn') : $('guideEnglishBtn');
+            const origText = btn.innerHTML;
+
+            guideAudio.play().catch(() => {
+                announce('안내 음성 재생 중 오류가 발생했습니다.');
+            });
+
+            btn.innerHTML = '<span aria-hidden="true">&#x23F8;</span> 정지';
+
+            guideAudio.onended = () => { btn.innerHTML = origText; };
+            guideAudio.onerror = () => { btn.innerHTML = origText; };
+        }
+
+        // ==================== BELL (Web Audio API) ====================
+        function playBell() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 800;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.5);
+            } catch (e) { /* silent fallback */ }
+        }
+
+        // ==================== TIMER ====================
+        const CIRCUMFERENCE = 2 * Math.PI * 34; // ~213.628
+
+        function startTimer() {
+            stopTimer();
+            const duration = currentQuestionIndex === -1 ? 20 : 15;
+            timeLeft = duration;
+
+            updateTimerDisplay(duration, duration);
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay(timeLeft, duration);
+
+                if (timeLeft <= 0) {
+                    stopTimer();
+                    playBell();
+                    $('audioStatus').textContent = '시간이 종료되었습니다';
+                    announce('시간이 종료되었습니다. 다음 버튼을 눌러 주세요.');
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function updateTimerDisplay(remaining, total) {
+            $('timerNumber').textContent = remaining;
+            const offset = CIRCUMFERENCE * (1 - remaining / total);
+            const circle = $('timerCircle');
+            circle.style.strokeDashoffset = offset;
+
+            circle.classList.remove('warning', 'danger');
+            if (remaining <= 3) circle.classList.add('danger');
+            else if (remaining <= 5) circle.classList.add('warning');
+        }
+
+        // ==================== QUESTION SELECTION ====================
+        function selectRandomQuestions() {
+            selectedQuestions = [];
+            Object.keys(questions).forEach(cat => {
+                const qs = questions[cat];
+                const idx = Math.floor(Math.random() * qs.length);
+                selectedQuestions.push({ category: cat, question: qs[idx] });
+            });
+        }
+
+        // ==================== SCREEN MANAGEMENT ====================
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            $(id).classList.add('active');
+            // Focus first heading or button for accessibility
+            const focusTarget = $(id).querySelector('h1, h3, .btn-primary');
+            if (focusTarget) {
+                focusTarget.setAttribute('tabindex', '-1');
+                focusTarget.focus();
+            }
+        }
+
+        // ==================== PROGRESS ====================
+        function updateProgress() {
+            // Total: intro(1) + 3 questions = 4 phases
+            const total = 4;
+            const current = currentQuestionIndex + 2; // -1→1, 0→2, 1→3, 2→4
+            const pct = (current / total) * 100;
+            $('progressBar').style.width = pct + '%';
+            $('progressBar').parentElement.setAttribute('aria-valuenow', Math.round(pct));
+        }
+
+        // ==================== DISPLAY ====================
+        function displayPhase() {
+            stopTimer();
+            stopCurrentAudio();
+            $('audioStatus').textContent = '';
+
+            if (currentQuestionIndex === -1) {
+                // Self-introduction phase
+                $('phaseBadge').textContent = '자기소개';
+                $('phaseBadge').className = 'phase-badge phase-intro';
+                $('categoryBadge').style.display = 'none';
+                $('questionCounter').textContent = '';
+                $('questionText').textContent = '영어로 자기소개를 해 주세요.';
+                $('instructionText').textContent =
+                    '이름을 말하고, 좋아하는 것이나 취미 등 자신에 대한 정보를 두 가지 이상 말해 주세요.';
+                $('replayBtn').style.display = 'none';
+                $('nextBtn').textContent = '다음 (질문으로)';
+
+                announce('자기소개 시간입니다. 20초 동안 영어로 자기소개를 해 주세요.');
+                startTimer();
+            } else if (currentQuestionIndex < selectedQuestions.length) {
+                // Question phase
+                const curr = selectedQuestions[currentQuestionIndex];
+                $('phaseBadge').textContent = '질문 응답';
+                $('phaseBadge').className = 'phase-badge phase-question';
+                $('categoryBadge').style.display = 'inline-block';
+                $('categoryBadge').textContent = categoryNames[curr.category];
+                $('questionCounter').textContent =
+                    `Question ${currentQuestionIndex + 1} of ${selectedQuestions.length}`;
+                $('questionText').textContent = curr.question.text;
+                $('instructionText').textContent = '질문을 잘 듣고 영어로 답변해 주세요.';
+                $('replayBtn').style.display = 'inline-flex';
+
+                if (currentQuestionIndex === selectedQuestions.length - 1) {
+                    $('nextBtn').textContent = '완료';
+                } else {
+                    $('nextBtn').textContent = '다음 질문';
+                }
+
+                announce(`질문 ${currentQuestionIndex + 1}. ${curr.question.text}`);
+                playAudio(curr.question.id);
+            } else {
+                showCompletion();
+            }
+
+            updateProgress();
+        }
+
+        // ==================== COMPLETION ====================
+        function showCompletion() {
+            stopTimer();
+            stopCurrentAudio();
+            showScreen('completionScreen');
+
+            const list = $('questionSummary');
+            list.innerHTML = '';
+            selectedQuestions.forEach((item, i) => {
+                const li = document.createElement('li');
+                li.textContent = `${i + 1}. [${categoryNames[item.category]}] ${item.question.text}`;
+                list.appendChild(li);
+            });
+
+            announce('수행평가가 완료되었습니다. 수고하셨습니다.');
+        }
+
+        // ==================== ACCESSIBILITY ====================
+        function announce(text) {
+            const el = $('srAnnouncer');
+            if (el) {
+                el.textContent = '';
+                setTimeout(() => { el.textContent = text; }, 50);
+            }
+        }
+
+        // ==================== EVENT LISTENERS ====================
+
+        // Guide buttons
+        $('guideKoreanBtn').addEventListener('click', () => {
+            if (guideAudio && !guideAudio.paused) {
+                stopGuideAudio();
+                $('guideKoreanBtn').innerHTML =
+                    '<span aria-hidden="true">&#x1F50A;</span> 설명 듣기 (한국어)';
+            } else {
+                playGuide('korean');
+            }
+        });
+
+        $('guideEnglishBtn').addEventListener('click', () => {
+            if (guideAudio && !guideAudio.paused) {
+                stopGuideAudio();
+                $('guideEnglishBtn').innerHTML =
+                    '<span aria-hidden="true">&#x1F50A;</span> Guide (English)';
+            } else {
+                playGuide('english');
+            }
+        });
+
+        // Start
+        $('startBtn').addEventListener('click', () => {
+            stopGuideAudio();
+            selectRandomQuestions();
+            currentQuestionIndex = -1;
+            showScreen('interviewScreen');
+            displayPhase();
+        });
+
+        // Replay
+        $('replayBtn').addEventListener('click', () => {
+            if (currentQuestionIndex >= 0 && currentQuestionIndex < selectedQuestions.length) {
+                stopTimer();
+                playAudio(selectedQuestions[currentQuestionIndex].question.id);
+            }
+        });
+
+        // Next
+        $('nextBtn').addEventListener('click', () => {
+            stopTimer();
+            stopCurrentAudio();
+            currentQuestionIndex++;
+            displayPhase();
+        });
+
+        // Exit
+        $('exitBtn').addEventListener('click', () => {
+            stopTimer();
+            stopCurrentAudio();
+            showScreen('startScreen');
+            currentQuestionIndex = -1;
+            selectedQuestions = [];
+            $('progressBar').style.width = '0%';
+        });
+
+        // Restart
+        $('restartBtn').addEventListener('click', () => {
+            showScreen('startScreen');
+            currentQuestionIndex = -1;
+            selectedQuestions = [];
+            $('progressBar').style.width = '0%';
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Only when interview screen is active
+            if (!$('interviewScreen').classList.contains('active')) return;
+
+            if (e.key === 'Enter' || e.key === ' ') {
+                // Prevent if a button is already focused
+                if (document.activeElement.tagName === 'BUTTON') return;
+                e.preventDefault();
+                $('nextBtn').click();
+            } else if (e.key === 'r' || e.key === 'R') {
+                if ($('replayBtn').style.display !== 'none') {
+                    $('replayBtn').click();
+                }
+            } else if (e.key === 'Escape') {
+                $('exitBtn').click();
+            }
+        });
+
+    })();
+    </script>
+</body>
+</html>
