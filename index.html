@@ -666,7 +666,7 @@
                 $('nextBtn').textContent = '다음 (질문으로)';
 
                 announce('자기소개 시간입니다. 20초 동안 영어로 자기소개를 해 주세요.');
-                startTimer();
+                playAudio('introduce');
             } else if (currentQuestionIndex < selectedQuestions.length) {
                 // Question phase
                 const curr = selectedQuestions[currentQuestionIndex];
